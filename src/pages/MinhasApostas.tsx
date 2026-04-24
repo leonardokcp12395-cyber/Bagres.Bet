@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
 import { Skeleton } from '../components/Skeleton';
 import { EmptyState } from '../components/EmptyState';
+import confetti from 'canvas-confetti';
 
 interface ApostaComPartida {
   id: string;
@@ -42,8 +43,21 @@ export default function MinhasApostas() {
         .order('id', { ascending: false });
 
       if (!error && data) {
-        // Supondo que a junção retorne um objeto para `partidas`
-        setApostas(data as unknown as ApostaComPartida[]);
+        const parsedData = data as unknown as ApostaComPartida[];
+        setApostas(parsedData);
+
+        // Gamification: Trigger confetti if there's any winning bet
+        // Real-world implementation might store a "seen" flag in localstorage
+        // to avoid firing confetti every time the user opens the page.
+        const hasWonBets = parsedData.some(aposta => aposta.status === 'ganhou');
+        if (hasWonBets) {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#22c55e', '#16a34a', '#4ade80']
+          });
+        }
       }
       setLoading(false);
     };

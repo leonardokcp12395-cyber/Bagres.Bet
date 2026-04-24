@@ -5,6 +5,8 @@ interface OddsResult {
   oddA: number;
   oddB: number;
   loading: boolean;
+  trendA: 'up' | 'down' | 'neutral';
+  trendB: 'up' | 'down' | 'neutral';
 }
 
 export function useDynamicOdds(partidaId: string, initialOddA: number, initialOddB: number, timeA: string, timeB: string): OddsResult {
@@ -12,6 +14,8 @@ export function useDynamicOdds(partidaId: string, initialOddA: number, initialOd
     oddA: initialOddA,
     oddB: initialOddB,
     loading: true,
+    trendA: 'neutral',
+    trendB: 'neutral',
   });
 
   useEffect(() => {
@@ -29,7 +33,7 @@ export function useDynamicOdds(partidaId: string, initialOddA: number, initialOd
         if (!isMounted) return;
 
         if (!data || data.length === 0) {
-          setOdds({ oddA: initialOddA, oddB: initialOddB, loading: false });
+          setOdds({ oddA: initialOddA, oddB: initialOddB, loading: false, trendA: 'neutral', trendB: 'neutral' });
           return;
         }
 
@@ -54,11 +58,24 @@ export function useDynamicOdds(partidaId: string, initialOddA: number, initialOd
         calcOddA = Math.max(1.1, Number(calcOddA.toFixed(2)));
         calcOddB = Math.max(1.1, Number(calcOddB.toFixed(2)));
 
-        setOdds({ oddA: calcOddA, oddB: calcOddB, loading: false });
+        setOdds((prev) => {
+          let trendA: 'up' | 'down' | 'neutral' = 'neutral';
+          let trendB: 'up' | 'down' | 'neutral' = 'neutral';
+
+          if (!prev.loading) {
+            if (calcOddA > prev.oddA) trendA = 'up';
+            if (calcOddA < prev.oddA) trendA = 'down';
+            if (calcOddB > prev.oddB) trendB = 'up';
+            if (calcOddB < prev.oddB) trendB = 'down';
+          }
+
+          return { oddA: calcOddA, oddB: calcOddB, loading: false, trendA, trendB };
+        });
+
       } catch (err) {
         console.error('Failed to calculate dynamic odds:', err);
         if (isMounted) {
-            setOdds({ oddA: initialOddA, oddB: initialOddB, loading: false });
+            setOdds({ oddA: initialOddA, oddB: initialOddB, loading: false, trendA: 'neutral', trendB: 'neutral' });
         }
       }
     };
