@@ -3,33 +3,19 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import { useAuthStore } from './store/auth';
+import { OfflineOverlay } from './components/OfflineOverlay';
 
-// Placeholder Pages
 import Login from './pages/Login';
-
-const Dashboard = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <h1 className="text-3xl font-bold text-primary-green">Dashboard Em Breve</h1>
-  </div>
-);
-
-const Admin = () => {
-  const { profile } = useAuthStore();
-
-  if (!profile?.is_admin) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold text-red-500">Painel Admin Em Breve</h1>
-    </div>
-  );
-};
+import Onboarding from './pages/Onboarding';
+import Dashboard from './pages/Dashboard';
+import MinhasApostas from './pages/MinhasApostas';
+import Ranking from './pages/Ranking';
+import Admin from './pages/Admin';
+import { MainLayout } from './layouts/MainLayout';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuthStore();
+  const { user, profile, loading } = useAuthStore();
 
   if (loading) {
     return (
@@ -41,6 +27,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   if (!user) {
     return <Navigate to="/" replace />;
+  }
+
+  // If user is authenticated but has no profile, force onboarding
+  if (!profile && window.location.pathname !== '/onboarding') {
+    return <Navigate to="/onboarding" replace />;
   }
 
   return <>{children}</>;
@@ -75,16 +66,24 @@ function App() {
 
   return (
     <BrowserRouter>
+      <OfflineOverlay />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
-          path="/dashboard"
+          path="/onboarding"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Onboarding />
             </ProtectedRoute>
           }
         />
+        {/* Main Layout Wrapper for Dashboard, Apostas, Ranking */}
+        <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/minhas-apostas" element={<MinhasApostas />} />
+          <Route path="/ranking" element={<Ranking />} />
+        </Route>
+
         <Route
           path="/admin"
           element={

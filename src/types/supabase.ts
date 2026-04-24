@@ -62,6 +62,7 @@ export interface Database {
         Row: {
           id: string
           user_id: string
+          username_apostador: string
           partida_id: string
           time_escolhido: string
           valor_apostado: number
@@ -70,6 +71,7 @@ export interface Database {
         Insert: {
           id?: string
           user_id: string
+          username_apostador: string
           partida_id: string
           time_escolhido: string
           valor_apostado: number
@@ -78,6 +80,7 @@ export interface Database {
         Update: {
           id?: string
           user_id?: string
+          username_apostador?: string
           partida_id?: string
           time_escolhido?: string
           valor_apostado?: number
