@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { ListOrdered, Clock, CheckCircle2, XCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
+import { Skeleton } from '../components/Skeleton';
+import { EmptyState } from '../components/EmptyState';
 
 interface ApostaComPartida {
   id: string;
@@ -95,12 +97,15 @@ export default function MinhasApostas() {
       <div className="flex flex-col gap-4 pb-24">
         {loading ? (
           [1, 2, 3].map((i) => (
-            <div key={i} className="h-24 bg-dark-card border border-dark-border rounded-xl animate-pulse"></div>
+            <Skeleton key={i} className="h-28 w-full" />
           ))
         ) : apostas.length === 0 ? (
-          <div className="text-center py-10 text-text-muted">
-            Você ainda não fez nenhuma aposta.
-          </div>
+          <EmptyState
+            title="Caderneta Limpa"
+            description="Sua caderneta está limpa. Tá com medo de apostar?"
+            actionText="Ir para as Partidas"
+            actionLink="/dashboard"
+          />
         ) : (
           apostas.map((aposta, index) => {
             const config = getStatusConfig(aposta.status);

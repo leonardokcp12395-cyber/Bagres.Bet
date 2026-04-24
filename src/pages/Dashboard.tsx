@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LiveFeed } from '../components/LiveFeed';
 import { PartidaCard } from '../components/PartidaCard';
+import { Skeleton } from '../components/Skeleton';
+import { Footer } from '../components/Footer';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
 import type { Database } from '../types/supabase';
@@ -12,6 +14,7 @@ type PartidaRow = Database['public']['Tables']['partidas']['Row'];
 export default function Dashboard() {
   const { profile } = useAuthStore();
   const [partidas, setPartidas] = useState<PartidaRow[]>([]);
+  const [loading, setLoading] = useState(true);
   const isBankrupt = profile?.saldo_bagrecoins === 0;
 
   useEffect(() => {
@@ -24,6 +27,7 @@ export default function Dashboard() {
       if (!error && data) {
         setPartidas(data);
       }
+      setLoading(false);
     };
 
     fetchPartidas();
@@ -86,7 +90,13 @@ export default function Dashboard() {
       </div>
 
       <div className="flex flex-col gap-4 pb-12">
-        {partidas.length === 0 ? (
+        {loading ? (
+          <>
+            <Skeleton className="h-40 w-full" />
+            <Skeleton className="h-40 w-full" />
+            <Skeleton className="h-40 w-full" />
+          </>
+        ) : partidas.length === 0 ? (
           <div className="text-center py-10 text-text-muted">
             Nenhuma partida encontrada.
           </div>
@@ -100,6 +110,8 @@ export default function Dashboard() {
           ))
         )}
       </div>
+
+      <Footer />
     </motion.div>
   );
 }

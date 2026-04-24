@@ -95,7 +95,7 @@ export default function Login() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center">
-          <img src="/src/assets/hero.png" alt="Bagre.bet Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse" />
+          <img src="/src/assets/LogoIcon.png" alt="Bagre.bet Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse" />
         </div>
         <h2 className="mt-4 text-center text-3xl font-extrabold text-text-light tracking-tight">
           Bagre.bet
