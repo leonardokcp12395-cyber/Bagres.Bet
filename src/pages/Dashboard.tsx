@@ -5,6 +5,7 @@ import { PartidaCard } from '../components/PartidaCard';
 import { Skeleton } from '../components/Skeleton';
 import { Footer } from '../components/Footer';
 import { WelcomeBanner } from '../components/WelcomeBanner';
+import { BetSlip } from '../components/BetSlip';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
 import type { Database } from '../types/supabase';
@@ -115,6 +116,7 @@ export default function Dashboard() {
       </div>
 
       <Footer />
+      <BetSlip />
     </motion.div>
   );
 }

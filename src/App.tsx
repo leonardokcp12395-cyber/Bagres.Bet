@@ -14,6 +14,7 @@ import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import { MainLayout } from './layouts/MainLayout';
 import { Toaster } from 'sonner';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -67,10 +68,11 @@ function App() {
   }, [setUser, fetchProfile]);
 
   return (
-    <BrowserRouter>
-      <Toaster theme="dark" position="top-center" />
-      <OfflineOverlay />
-      <Routes>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Toaster theme="dark" position="top-center" />
+        <OfflineOverlay />
+        <Routes>
         <Route path="/" element={<Login />} />
         <Route
           path="/onboarding"
@@ -88,17 +90,18 @@ function App() {
           <Route path="/perfil" element={<Profile />} />
         </Route>
 
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

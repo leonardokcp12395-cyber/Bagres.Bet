@@ -4,12 +4,13 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AdminCaixa } from '../components/AdminCaixa';
 import { AdminPartidas } from '../components/AdminPartidas';
+import { AdminAnalytics } from '../components/AdminAnalytics';
 import { ArrowLeft } from 'lucide-react';
 
 export default function Admin() {
   const { profile } = useAuthStore();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'partidas' | 'caixa'>('caixa');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'partidas' | 'caixa'>('analytics');
 
   if (!profile?.is_admin) {
     return <Navigate to="/dashboard" replace />;
@@ -30,8 +31,16 @@ export default function Admin() {
 
       <div className="flex bg-dark-card border border-dark-border p-1 rounded-xl mb-6">
         <button
+          onClick={() => setActiveTab('analytics')}
+          className={`flex-1 py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
+            activeTab === 'analytics' ? 'bg-dark-bg text-primary-green shadow' : 'text-text-muted hover:text-text-light'
+          }`}
+        >
+          Risco
+        </button>
+        <button
           onClick={() => setActiveTab('partidas')}
-          className={`flex-1 py-3 text-sm font-bold rounded-lg transition-colors ${
+          className={`flex-1 py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
             activeTab === 'partidas' ? 'bg-dark-bg text-primary-green shadow' : 'text-text-muted hover:text-text-light'
           }`}
         >
@@ -39,7 +48,7 @@ export default function Admin() {
         </button>
         <button
           onClick={() => setActiveTab('caixa')}
-          className={`flex-1 py-3 text-sm font-bold rounded-lg transition-colors ${
+          className={`flex-1 py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
             activeTab === 'caixa' ? 'bg-dark-bg text-primary-green shadow' : 'text-text-muted hover:text-text-light'
           }`}
         >
@@ -48,7 +57,9 @@ export default function Admin() {
       </div>
 
       <div className="flex-grow">
-        {activeTab === 'partidas' ? <AdminPartidas /> : <AdminCaixa />}
+        {activeTab === 'analytics' && <AdminAnalytics />}
+        {activeTab === 'partidas' && <AdminPartidas />}
+        {activeTab === 'caixa' && <AdminCaixa />}
       </div>
     </motion.div>
   );

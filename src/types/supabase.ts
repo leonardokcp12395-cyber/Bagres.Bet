@@ -67,6 +67,8 @@ export interface Database {
           time_escolhido: string
           valor_apostado: number
           status: 'pendente' | 'ganhou' | 'perdeu'
+          is_multipla: boolean
+          multipla_data: Json | null
         }
         Insert: {
           id?: string
@@ -76,6 +78,8 @@ export interface Database {
           time_escolhido: string
           valor_apostado: number
           status?: 'pendente' | 'ganhou' | 'perdeu'
+          is_multipla?: boolean
+          multipla_data?: Json | null
         }
         Update: {
           id?: string
@@ -85,6 +89,8 @@ export interface Database {
           time_escolhido?: string
           valor_apostado?: number
           status?: 'pendente' | 'ganhou' | 'perdeu'
+          is_multipla?: boolean
+          multipla_data?: Json | null
         }
       }
     }
