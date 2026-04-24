@@ -52,7 +52,7 @@ export default function Onboarding() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
         <div className="flex justify-center mb-6">
-          <img src="/src/assets/hero.png" alt="Bagre.bet Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.4)] animate-pulse" />
+          <img src="/src/assets/LogoIcon.png" alt="Bagre.bet Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.4)] animate-pulse" />
         </div>
         <h2 className="text-3xl font-extrabold text-text-light tracking-tight mb-2">
           Escolha seu Vulgo

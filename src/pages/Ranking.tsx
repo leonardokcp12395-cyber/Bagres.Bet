@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Trophy, Medal } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
+import CountUp from 'react-countup';
+import { Skeleton } from '../components/Skeleton';
 
 interface Profile {
   id: string;
@@ -74,7 +76,7 @@ export default function Ranking() {
       <div className="flex flex-col gap-3 pb-24">
         {loading ? (
           [1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-16 bg-dark-card border border-dark-border rounded-xl animate-pulse"></div>
+            <Skeleton key={i} className="h-16 w-full" />
           ))
         ) : (
           ranking.map((profile, index) => {
@@ -98,8 +100,13 @@ export default function Ranking() {
                     </span>
                   </div>
                 </div>
-                <div className="font-black text-lg">
-                  {profile.saldo_bagrecoins} <span className="text-sm opacity-80">🪙</span>
+                <div className="font-black text-lg tabular-nums">
+                  <CountUp
+                    end={profile.saldo_bagrecoins}
+                    duration={1.5}
+                    separator="."
+                    preserveValue={true}
+                  /> <span className="text-sm opacity-80">🪙</span>
                 </div>
               </motion.div>
             );
