@@ -10,14 +10,42 @@ interface PartidaCardProps {
   onBetClick: (partida: PartidaRow, time: string, odd: number) => void;
 }
 
+import { useEffect, useState } from 'react';
+
 export function PartidaCard({ partida, onBetClick }: PartidaCardProps) {
-  const { oddA, oddB, loading } = useDynamicOdds(
+  const { oddA, oddB, loading, trendA, trendB } = useDynamicOdds(
     partida.id,
     partida.odd_a,
     partida.odd_b,
     partida.time_a,
     partida.time_b
   );
+
+  // Use local state to handle the flash timeout
+  const [flashA, setFlashA] = useState<'up' | 'down' | 'neutral'>('neutral');
+  const [flashB, setFlashB] = useState<'up' | 'down' | 'neutral'>('neutral');
+
+  useEffect(() => {
+    if (trendA !== 'neutral') {
+      setFlashA(trendA);
+      const t = setTimeout(() => setFlashA('neutral'), 1000);
+      return () => clearTimeout(t);
+    }
+  }, [trendA, oddA]);
+
+  useEffect(() => {
+    if (trendB !== 'neutral') {
+      setFlashB(trendB);
+      const t = setTimeout(() => setFlashB('neutral'), 1000);
+      return () => clearTimeout(t);
+    }
+  }, [trendB, oddB]);
+
+  const getFlashClass = (trend: 'up' | 'down' | 'neutral') => {
+    if (trend === 'up') return 'bg-green-500/20 text-green-400';
+    if (trend === 'down') return 'bg-red-500/20 text-red-400';
+    return 'text-text-light';
+  };
 
   return (
     <div className="bg-dark-card border border-dark-border rounded-2xl p-4 shadow-lg flex flex-col gap-4">
@@ -57,9 +85,9 @@ export function PartidaCard({ partida, onBetClick }: PartidaCardProps) {
           <span className="text-xs font-bold text-text-muted text-left">Vitória<br/>{partida.time_a}</span>
           <motion.span
             key={`oddA-${oddA}`}
-            initial={{ scale: 1.2, color: '#22c55e' }}
-            animate={{ scale: 1, color: '#e5e7eb' }}
-            className="text-lg font-black text-text-light"
+            initial={{ scale: 1.2 }}
+            animate={{ scale: 1 }}
+            className={`text-lg font-black px-2 py-0.5 rounded transition-colors duration-300 ${getFlashClass(flashA)}`}
           >
             {loading ? '...' : oddA.toFixed(2)}
           </motion.span>
@@ -72,9 +100,9 @@ export function PartidaCard({ partida, onBetClick }: PartidaCardProps) {
         >
           <motion.span
             key={`oddB-${oddB}`}
-            initial={{ scale: 1.2, color: '#22c55e' }}
-            animate={{ scale: 1, color: '#e5e7eb' }}
-            className="text-lg font-black text-text-light"
+            initial={{ scale: 1.2 }}
+            animate={{ scale: 1 }}
+            className={`text-lg font-black px-2 py-0.5 rounded transition-colors duration-300 ${getFlashClass(flashB)}`}
           >
             {loading ? '...' : oddB.toFixed(2)}
           </motion.span>

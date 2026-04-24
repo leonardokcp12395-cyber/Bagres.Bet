@@ -10,8 +10,10 @@ import Onboarding from './pages/Onboarding';
 import Dashboard from './pages/Dashboard';
 import MinhasApostas from './pages/MinhasApostas';
 import Ranking from './pages/Ranking';
+import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import { MainLayout } from './layouts/MainLayout';
+import { Toaster } from 'sonner';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -66,6 +68,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Toaster theme="dark" position="top-center" />
       <OfflineOverlay />
       <Routes>
         <Route path="/" element={<Login />} />
@@ -77,11 +80,12 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Main Layout Wrapper for Dashboard, Apostas, Ranking */}
+        {/* Main Layout Wrapper for Dashboard, Apostas, Ranking, Perfil */}
         <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/minhas-apostas" element={<MinhasApostas />} />
           <Route path="/ranking" element={<Ranking />} />
+          <Route path="/perfil" element={<Profile />} />
         </Route>
 
         <Route
