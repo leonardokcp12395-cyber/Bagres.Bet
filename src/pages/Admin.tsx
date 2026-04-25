@@ -3,6 +3,7 @@ import { useAuthStore } from '../store/auth';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AdminCaixa } from '../components/AdminCaixa';
+import { AdminCompras } from '../components/AdminCompras';
 import { AdminPartidas } from '../components/AdminPartidas';
 import { AdminAnalytics } from '../components/AdminAnalytics';
 import { ArrowLeft } from 'lucide-react';
@@ -10,7 +11,7 @@ import { ArrowLeft } from 'lucide-react';
 export default function Admin() {
   const { profile } = useAuthStore();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'analytics' | 'partidas' | 'caixa'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'partidas' | 'caixa' | 'loja'>('analytics');
 
   if (!profile?.is_admin) {
     return <Navigate to="/dashboard" replace />;
@@ -29,10 +30,10 @@ export default function Admin() {
         <h1 className="text-2xl font-black text-text-light">Painel Admin</h1>
       </div>
 
-      <div className="flex bg-dark-card border border-dark-border p-1 rounded-xl mb-6">
+      <div className="flex flex-wrap bg-dark-card border border-dark-border p-1 rounded-xl mb-6">
         <button
           onClick={() => setActiveTab('analytics')}
-          className={`flex-1 py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
+          className={`flex-1 min-w-[80px] py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
             activeTab === 'analytics' ? 'bg-dark-bg text-primary-green shadow' : 'text-text-muted hover:text-text-light'
           }`}
         >
@@ -40,7 +41,7 @@ export default function Admin() {
         </button>
         <button
           onClick={() => setActiveTab('partidas')}
-          className={`flex-1 py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
+          className={`flex-1 min-w-[80px] py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
             activeTab === 'partidas' ? 'bg-dark-bg text-primary-green shadow' : 'text-text-muted hover:text-text-light'
           }`}
         >
@@ -48,11 +49,19 @@ export default function Admin() {
         </button>
         <button
           onClick={() => setActiveTab('caixa')}
-          className={`flex-1 py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
+          className={`flex-1 min-w-[80px] py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
             activeTab === 'caixa' ? 'bg-dark-bg text-primary-green shadow' : 'text-text-muted hover:text-text-light'
           }`}
         >
           Caixa
+        </button>
+        <button
+          onClick={() => setActiveTab('loja')}
+          className={`flex-1 min-w-[80px] py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
+            activeTab === 'loja' ? 'bg-dark-bg text-primary-green shadow' : 'text-text-muted hover:text-text-light'
+          }`}
+        >
+          Loja (PIX)
         </button>
       </div>
 
@@ -60,6 +69,7 @@ export default function Admin() {
         {activeTab === 'analytics' && <AdminAnalytics />}
         {activeTab === 'partidas' && <AdminPartidas />}
         {activeTab === 'caixa' && <AdminCaixa />}
+        {activeTab === 'loja' && <AdminCompras />}
       </div>
     </motion.div>
   );

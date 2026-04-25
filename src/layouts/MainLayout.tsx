@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { Home, ListOrdered, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User } from 'lucide-react';
+import { User, ShoppingCart } from 'lucide-react';
 import logoIcon from '../assets/LogoIcon.png';
 
 export function MainLayout() {
@@ -9,6 +9,7 @@ export function MainLayout() {
     { to: '/dashboard', icon: <Home className="w-6 h-6 lg:w-5 lg:h-5" />, label: 'Home' },
     { to: '/minhas-apostas', icon: <ListOrdered className="w-6 h-6 lg:w-5 lg:h-5" />, label: 'Apostas' },
     { to: '/ranking', icon: <Trophy className="w-6 h-6 lg:w-5 lg:h-5" />, label: 'Ranking' },
+    { to: '/loja', icon: <ShoppingCart className="w-6 h-6 lg:w-5 lg:h-5" />, label: 'Loja' },
     { to: '/perfil', icon: <User className="w-6 h-6 lg:w-5 lg:h-5" />, label: 'Perfil' },
   ];
 

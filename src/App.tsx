@@ -12,6 +12,7 @@ import MinhasApostas from './pages/MinhasApostas';
 import Ranking from './pages/Ranking';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
+import Loja from './pages/Loja';
 import { MainLayout } from './layouts/MainLayout';
 import { Toaster, toast } from 'sonner';
 import { PwaPrompt } from './components/PwaPrompt';
@@ -108,6 +109,7 @@ function App() {
         <Route path="/minhas-apostas" element={<MinhasApostas />} />
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/perfil" element={<Profile />} />
+        <Route path="/loja" element={<Loja />} />
       </Route>
 
         <Route
