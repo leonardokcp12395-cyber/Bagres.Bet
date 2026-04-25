@@ -17,6 +17,17 @@ export default function Ranking() {
   const [loading, setLoading] = useState(true);
   const { user } = useAuthStore();
 
+  // 👇 ADICIONE ESTE BLOCO AQUI
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-dark-bg p-8 flex flex-col items-center pt-20">
+        <div className="w-8 h-8 border-4 border-primary-green border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-primary-green font-bold">Montando pódio...</p>
+      </div>
+    );
+  }
+  // 👆 FIM DO BLOCO
+
   useEffect(() => {
     const fetchRanking = async () => {
       const { data, error } = await supabase
