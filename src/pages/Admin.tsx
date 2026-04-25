@@ -11,16 +11,6 @@ export default function Admin() {
   const { profile } = useAuthStore();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'analytics' | 'partidas' | 'caixa'>('analytics');
-  // 👇 ADICIONE ESTE BLOCO AQUI (Trava anti-crash)
-  if (!profile) {
-    return (
-      <div className="min-h-screen bg-dark-bg p-8 flex flex-col items-center justify-center">
-        <div className="w-8 h-8 border-4 border-primary-green border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-primary-green font-bold">Verificando credenciais...</p>
-      </div>
-    );
-  }
-  // 👆 FIM DO BLOCO
 
   if (!profile?.is_admin) {
     return <Navigate to="/dashboard" replace />;
