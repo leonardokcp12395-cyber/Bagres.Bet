@@ -1,9 +1,12 @@
-export const getTeamLogoUrl = (teamName: string) => {
-  // A simple heuristic or mapping. In a real scenario, this would match an API exactly.
-  // Using https://github.com/luukhopman/football-logos for high quality transparent logos.
 
-  // Example fallback or direct mapping logic could be placed here.
-  // For now, we will return a generic shield if not found, or use a known service.
-  // Using openligadb as an example fallback strategy, but for direct URLs we can use ui-avatars as fallback.
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(teamName)}&background=1c1e26&color=22c55e&rounded=true&bold=true`;
+/**
+ * Retorna a URL pública do Supabase para o escudo de um time.
+ * @param leagueFolder A pasta da liga no bucket (ex: 'premier-league', 'brasileirao')
+ * @param id O ID do time (nome do arquivo SVG sem extensão)
+ */
+export const getTeamLogoUrl = (leagueFolder: string, id: string): string => {
+  const baseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+  // Garante que não termine com barra e monta o path
+  const cleanBaseUrl = baseUrl.replace(/\/$/, '');
+  return `${cleanBaseUrl}/storage/v1/object/public/escudos/${leagueFolder}/${id}.svg`;
 };

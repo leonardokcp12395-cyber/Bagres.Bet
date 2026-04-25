@@ -85,7 +85,7 @@ export function PartidaCard({ partida, onBetClick }: PartidaCardProps) {
         {/* Time A */}
         <div className="flex flex-col items-center gap-2 flex-1">
           <img
-            src={getTeamLogoUrl(partida.time_a)}
+            src={getTeamLogoUrl('custom', partida.time_a.toLowerCase().replace(/\s+/g, '-'))}
             alt={partida.time_a}
             className="w-12 h-12 rounded-full object-cover border-2 border-dark-bg"
           />
@@ -100,7 +100,7 @@ export function PartidaCard({ partida, onBetClick }: PartidaCardProps) {
         {/* Time B */}
         <div className="flex flex-col items-center gap-2 flex-1">
           <img
-            src={getTeamLogoUrl(partida.time_b)}
+            src={getTeamLogoUrl('custom', partida.time_b.toLowerCase().replace(/\s+/g, '-'))}
             alt={partida.time_b}
             className="w-12 h-12 rounded-full object-cover border-2 border-dark-bg"
           />

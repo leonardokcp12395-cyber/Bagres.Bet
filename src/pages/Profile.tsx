@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LogOut, User as UserIcon } from 'lucide-react';
+import { LogOut, User as UserIcon, Edit2, Check, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +8,12 @@ import CountUp from 'react-countup';
 import { toast } from 'sonner';
 
 export default function Profile() {
-  const { profile, setUser } = useAuthStore();
+  const { profile, setUser, fetchProfile } = useAuthStore();
   const navigate = useNavigate();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [newUsername, setNewUsername] = useState(profile?.username || '');
+  const [savingUsername, setSavingUsername] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -22,17 +27,38 @@ export default function Profile() {
     }
   };
 
+  const handleSaveUsername = async () => {
+    if (!newUsername.trim() || !profile) return;
+    setSavingUsername(true);
+    try {
+      const { error } = await (supabase as any)
+        .from('profiles')
+        .update({ username: newUsername.trim() })
+        .eq('id', profile.id);
+
+      if (error) throw error;
+      toast.success('Perfil atualizado!');
+      setIsEditing(false);
+      await fetchProfile(profile.id);
+    } catch (error) {
+      console.error(error);
+      toast.error('Erro ao atualizar nome.');
+    } finally {
+      setSavingUsername(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.3 }}
-      className="p-4 pt-8 min-h-screen flex flex-col items-center"
+      className="p-4 pt-8 min-h-screen flex flex-col items-center pb-24"
     >
       <div className="w-full max-w-md flex flex-col items-center mt-10">
         <div className="relative mb-6">
-          <div className="w-32 h-32 bg-dark-card border-4 border-primary-green rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+          <div className="w-32 h-32 bg-dark-card border-4 border-primary-green rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.3)] overflow-hidden">
             <UserIcon className="w-16 h-16 text-primary-green" />
           </div>
           {profile?.is_admin && (
@@ -42,9 +68,36 @@ export default function Profile() {
           )}
         </div>
 
-        <h1 className="text-3xl font-black text-text-light mb-1">
-          {profile?.username || 'Bagre Desconhecido'}
-        </h1>
+        {isEditing ? (
+          <div className="flex items-center gap-2 mb-6 w-full max-w-xs">
+            <input
+              type="text"
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+              className="flex-1 bg-dark-card border border-dark-border text-text-light px-4 py-2 rounded-lg focus:outline-none focus:border-primary-green text-center font-bold"
+              placeholder="Seu novo vulgo"
+            />
+            <button onClick={handleSaveUsername} disabled={savingUsername} className="p-2.5 bg-primary-green text-dark-bg rounded-lg hover:opacity-90">
+              <Check className="w-5 h-5" />
+            </button>
+            <button onClick={() => { setIsEditing(false); setNewUsername(profile?.username || ''); }} className="p-2.5 bg-dark-card border border-dark-border text-text-muted hover:text-text-light rounded-lg">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 mb-1 group">
+            <h1 className="text-3xl font-black text-text-light">
+              {profile?.username || 'Bagre Desconhecido'}
+            </h1>
+            <button
+              onClick={() => setIsEditing(true)}
+              className="p-1.5 text-text-muted hover:text-primary-green hover:bg-dark-card rounded-md transition-colors"
+            >
+              <Edit2 className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         <p className="text-text-muted mb-10 text-sm">Pronto para o próximo green?</p>
 
         <div className="w-full bg-dark-card border border-dark-border rounded-3xl p-8 mb-8 text-center shadow-lg relative overflow-hidden">
