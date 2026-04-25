@@ -102,7 +102,7 @@ export default function Ranking() {
                 </div>
                 <div className="font-black text-lg tabular-nums">
                   <CountUp
-                    end={Number(profile.saldo_bagrecoins) || 0}
+                    end={profile.saldo_bagrecoins == null ? 0 : Number(profile.saldo_bagrecoins)}
                     duration={1.5}
                     separator="."
                     preserveValue={true}

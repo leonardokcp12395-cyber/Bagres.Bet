@@ -6,6 +6,69 @@ import { toast } from 'sonner';
 import { Combobox } from '@headlessui/react';
 import { ChevronUpDownIcon, CheckIcon } from '@heroicons/react/24/solid';
 
+
+const TeamCombobox = ({ selected, setSelected, setQuery, filteredTeams, label }: any) => (
+  <Combobox value={selected} onChange={setSelected}>
+    <div className="relative mt-1">
+      <label className="text-sm font-bold text-text-muted mb-2 block">{label}</label>
+      <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-dark-bg text-left border border-dark-border focus-within:border-primary-green transition-colors sm:text-sm">
+        <Combobox.Input
+          className="w-full border-none py-3 pl-3 pr-10 text-sm leading-5 text-text-light bg-transparent focus:ring-0 focus:outline-none"
+          displayValue={(team: any) => team?.name || ''}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+          <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+        </Combobox.Button>
+      </div>
+      <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-dark-card py-1 text-base shadow-lg border border-dark-border ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+        {filteredTeams.length === 0 && (
+          <div className="relative cursor-default select-none py-2 px-4 text-text-muted">
+            Nenhum time encontrado.
+          </div>
+        )}
+        {filteredTeams.map((team: any) => (
+          <Combobox.Option
+            key={team.id}
+            className={({ active }) =>
+              `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                active ? 'bg-primary-green/20 text-primary-green' : 'text-text-light'
+              }`
+            }
+            value={team}
+          >
+            {({ selected, active }) => (
+              <>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={getTeamLogoUrl(team.leagueFolder, team.id)}
+                    alt={team.name}
+                    className="w-6 h-6 object-contain"
+                    onError={(e) => {
+                      (e.target as any).style.display = 'none';
+                    }}
+                  />
+                  <div className="flex flex-col">
+                    <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                      {team.name}
+                    </span>
+                    <span className="text-[10px] text-text-muted">{team.leagueName}</span>
+                  </div>
+                </div>
+                {selected ? (
+                  <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-primary-green' : 'text-primary-green'}`}>
+                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                ) : null}
+              </>
+            )}
+          </Combobox.Option>
+        ))}
+      </Combobox.Options>
+    </div>
+  </Combobox>
+);
+
 export function AdminPartidas() {
   const [loading, setLoading] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
@@ -83,68 +146,6 @@ export function AdminPartidas() {
       setLoading(false);
     }
   };
-
-  const TeamCombobox = ({ selected, setSelected, setQuery, filteredTeams, label }: any) => (
-    <Combobox value={selected} onChange={setSelected}>
-      <div className="relative mt-1">
-        <label className="text-sm font-bold text-text-muted mb-2 block">{label}</label>
-        <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-dark-bg text-left border border-dark-border focus-within:border-primary-green transition-colors sm:text-sm">
-          <Combobox.Input
-            className="w-full border-none py-3 pl-3 pr-10 text-sm leading-5 text-text-light bg-transparent focus:ring-0 focus:outline-none"
-            displayValue={(team: any) => team?.name || ''}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-          </Combobox.Button>
-        </div>
-        <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-dark-card py-1 text-base shadow-lg border border-dark-border ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-          {filteredTeams.length === 0 && (
-            <div className="relative cursor-default select-none py-2 px-4 text-text-muted">
-              Nenhum time encontrado.
-            </div>
-          )}
-          {filteredTeams.map((team: any) => (
-            <Combobox.Option
-              key={team.id}
-              className={({ active }) =>
-                `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                  active ? 'bg-primary-green/20 text-primary-green' : 'text-text-light'
-                }`
-              }
-              value={team}
-            >
-              {({ selected, active }) => (
-                <>
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={getTeamLogoUrl(team.leagueFolder, team.id)}
-                      alt={team.name}
-                      className="w-6 h-6 object-contain"
-                      onError={(e) => {
-                        (e.target as any).style.display = 'none';
-                      }}
-                    />
-                    <div className="flex flex-col">
-                      <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-                        {team.name}
-                      </span>
-                      <span className="text-[10px] text-text-muted">{team.leagueName}</span>
-                    </div>
-                  </div>
-                  {selected ? (
-                    <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-primary-green' : 'text-primary-green'}`}>
-                      <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  ) : null}
-                </>
-              )}
-            </Combobox.Option>
-          ))}
-        </Combobox.Options>
-      </div>
-    </Combobox>
-  );
 
   return (
     <div className="bg-dark-card border border-dark-border rounded-2xl p-6">

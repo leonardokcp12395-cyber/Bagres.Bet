@@ -70,7 +70,7 @@ export function AdminAnalytics() {
             <TrendingUp className={`w-6 h-6 ${stats.ngr >= 0 ? 'text-primary-green' : 'text-red-500'}`} />
           </div>
           <div className={`text-3xl font-black tabular-nums ${stats.ngr >= 0 ? 'text-primary-green' : 'text-red-500'}`}>
-            {stats.ngr >= 0 ? '+' : '-'}<CountUp end={Math.abs(stats.ngr)} duration={1.5} separator="." /> 🪙
+            {stats.ngr >= 0 ? '+' : '-'}<CountUp end={Math.abs(stats.ngr || 0)} duration={1.5} separator="." /> 🪙
           </div>
         </div>
 
@@ -85,7 +85,7 @@ export function AdminAnalytics() {
             <BarChart3 className="w-6 h-6 text-blue-500" />
           </div>
           <div className="text-3xl font-black tabular-nums text-text-light">
-            <CountUp end={stats.volumeBloqueado} duration={1.5} separator="." /> 🪙
+            <CountUp end={stats.volumeBloqueado || 0} duration={1.5} separator="." /> 🪙
           </div>
         </div>
 
@@ -100,7 +100,7 @@ export function AdminAnalytics() {
             <AlertTriangle className="w-6 h-6 text-yellow-500" />
           </div>
           <div className="text-4xl font-black tabular-nums text-yellow-500">
-            <CountUp end={stats.potencialPerda} duration={1.5} separator="." /> 🪙
+            <CountUp end={stats.potencialPerda || 0} duration={1.5} separator="." /> 🪙
           </div>
 
           <div className="mt-6 pt-6 border-t border-dark-border flex justify-between items-center text-sm">
