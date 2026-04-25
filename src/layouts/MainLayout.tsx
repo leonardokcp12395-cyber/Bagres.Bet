@@ -1,11 +1,12 @@
-import { NavLink, Outlet } from 'react-router-dom';
-import { Home, ListOrdered, Trophy } from 'lucide-react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Home, ListOrdered, Trophy, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User } from 'lucide-react';
 import logoIcon from '../assets/LogoIcon.png';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 
 export function MainLayout() {
+  const location = useLocation(); // Essencial para identificar a mudança de rota
+
   const navItems = [
     { to: '/dashboard', icon: <Home className="w-6 h-6 lg:w-5 lg:h-5" />, label: 'Home' },
     { to: '/minhas-apostas', icon: <ListOrdered className="w-6 h-6 lg:w-5 lg:h-5" />, label: 'Apostas' },
@@ -15,14 +16,8 @@ export function MainLayout() {
 
   return (
     <div className="min-h-screen bg-dark-bg lg:bg-[#0a0a0a] flex justify-center text-text-light">
-
-      {/*
-        Container Responsivo:
-        - Mobile: w-full max-w-md (celular centralizado)
-        - Desktop (lg): w-full max-w-7xl, grid com Sidebar e Main Content
-      */}
       <div className="flex flex-col lg:flex-row w-full max-w-md lg:max-w-7xl min-h-screen bg-dark-bg relative lg:border-x lg:border-dark-border/50 lg:shadow-2xl">
-
+        
         {/* Sidebar (Desktop Only) */}
         <aside className="hidden lg:flex flex-col w-64 bg-dark-card border-r border-dark-border p-6 fixed h-screen z-40">
           <div className="flex items-center gap-3 mb-10">
@@ -30,9 +25,7 @@ export function MainLayout() {
               src={logoIcon}
               alt="Bagre Logo"
               className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(34,197,94,0.3)]"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
             <h2 className="text-2xl font-black text-text-light tracking-tight">Bagre.bet</h2>
           </div>
@@ -67,12 +60,15 @@ export function MainLayout() {
         </aside>
 
         {/* Main Content Area */}
-        {/* Adicionado margin-left no Desktop para compensar a Sidebar fixed */}
         <main className="flex-grow flex flex-col relative overflow-x-hidden pb-20 lg:pb-0 lg:ml-64 bg-dark-bg w-full">
           <div className="w-full max-w-4xl mx-auto flex flex-col flex-grow">
             <ErrorBoundary>
               <AnimatePresence mode="wait">
-                <Outlet />
+                {/* A KEY ABAIXO É O SEGREDO: 
+                  Ela força o React a desmontar a página antiga e montar a nova, 
+                  permitindo que o AnimatePresence detecte a saída e entrada corretamente.
+                */}
+                <Outlet key={location.pathname} /> 
               </AnimatePresence>
             </ErrorBoundary>
           </div>
