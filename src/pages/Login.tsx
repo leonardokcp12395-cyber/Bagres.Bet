@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LogIn, UserPlus, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
+import logoIcon from '../assets/LogoIcon.png';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -95,7 +96,14 @@ export default function Login() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center">
-          <img src="/src/assets/LogoIcon.png" alt="Bagre.bet Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse" />
+          <img
+            src={logoIcon}
+            alt="Bagre.bet Logo"
+            className="w-24 h-24 object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
         </div>
         <h2 className="mt-4 text-center text-3xl font-extrabold text-text-light tracking-tight">
           Bagre.bet

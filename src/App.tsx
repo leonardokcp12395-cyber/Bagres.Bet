@@ -13,7 +13,7 @@ import Ranking from './pages/Ranking';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import { MainLayout } from './layouts/MainLayout';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Protected Route Wrapper
@@ -44,13 +44,36 @@ function App() {
   const { setUser, fetchProfile } = useAuthStore();
 
   useEffect(() => {
+    // Global Real-time Listener for Bets
+    const globalApostasChannel = supabase
+      .channel('global-apostas')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'apostas' },
+        (payload) => {
+          const novaAposta = payload.new as any;
+          // Ignora apostas múltiplas para manter a notificação simples,
+          // ou exibe "Múltipla" se for o caso.
+          const time = novaAposta.is_multipla ? 'uma Múltipla' : novaAposta.time_escolhido;
+
+          toast(`🔥 ${novaAposta.username_apostador} acabou de apostar em ${time}!`, {
+            style: {
+              background: '#0D0E12',
+              color: '#fff',
+              border: '1px solid #22c55e',
+            },
+          });
+        }
+      )
+      .subscribe();
+
     // Check active sessions and sets the user
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
       } else {
-        useAuthStore.setState({ loading: false });
+        useAuthStore.setState({ loading: false, profile: null });
       }
     });
 
@@ -58,13 +81,21 @@ function App() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        // Only set loading to true if we don't already have the profile for this user
+        // This prevents flickering on token refresh.
+        if (useAuthStore.getState().profile?.id !== session.user.id) {
+          useAuthStore.setState({ loading: true });
+          fetchProfile(session.user.id);
+        }
       } else {
         useAuthStore.setState({ profile: null, loading: false });
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      supabase.removeChannel(globalApostasChannel);
+    };
   }, [setUser, fetchProfile]);
 
   return (

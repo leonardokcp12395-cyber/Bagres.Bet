@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Image as ImageIcon } from 'lucide-react';
+import bannerImg from '../assets/bannerEntrada.jpeg';
 
 const BANNER_STORAGE_KEY = 'bagre_bet_welcome_banner_last_seen';
 const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
@@ -45,11 +46,20 @@ export function WelcomeBanner() {
               <X className="w-5 h-5" />
             </button>
 
-            <img
-              src="/src/assets/bannerEntrada.jpeg"
-              alt="Bem-vindo ao Bagre.bet"
-              className="w-full h-auto object-cover"
-            />
+            {bannerImg ? (
+              <img
+                src={bannerImg}
+                alt="Bem-vindo ao Bagre.bet"
+                className="w-full h-auto object-cover max-h-48"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            ) : (
+              <div className="w-full h-48 bg-dark-bg flex items-center justify-center border-b border-dark-border">
+                <ImageIcon className="w-12 h-12 text-primary-green opacity-50" />
+              </div>
+            )}
 
             <div className="p-6 text-center">
               <h2 className="text-2xl font-black text-text-light mb-2">Bem-vindo ao Torneio!</h2>

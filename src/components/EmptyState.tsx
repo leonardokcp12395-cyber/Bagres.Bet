@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import logoIcon from '../assets/LogoIcon.png';
 
 interface EmptyStateProps {
   title: string;
@@ -15,11 +16,15 @@ export function EmptyState({ title, description, actionText, actionLink }: Empty
     <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
       <div className="relative mb-6">
         <img
-          src="/src/assets/LogoIcon.png"
+          src={logoIcon}
           alt="Bagre"
           className="w-32 h-32 object-contain opacity-20 grayscale"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+            e.currentTarget.parentElement?.classList.add('bg-dark-card', 'rounded-full', 'flex', 'items-center', 'justify-center', 'border', 'border-dark-border');
+          }}
         />
-        <div className="absolute inset-0 bg-dark-bg/50 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-dark-bg/50 mix-blend-overlay pointer-events-none"></div>
       </div>
 
       <h3 className="text-xl font-black text-text-light mb-2">{title}</h3>

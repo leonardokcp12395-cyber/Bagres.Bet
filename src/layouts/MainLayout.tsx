@@ -1,8 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { Home, ListOrdered, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
 import { User } from 'lucide-react';
+import logoIcon from '../assets/LogoIcon.png';
 
 export function MainLayout() {
   const navItems = [
@@ -25,7 +25,14 @@ export function MainLayout() {
         {/* Sidebar (Desktop Only) */}
         <aside className="hidden lg:flex flex-col w-64 bg-dark-card border-r border-dark-border p-6 fixed h-screen z-40">
           <div className="flex items-center gap-3 mb-10">
-            <img src="/src/assets/LogoIcon.png" alt="Bagre Logo" className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(34,197,94,0.3)]" />
+            <img
+              src={logoIcon}
+              alt="Bagre Logo"
+              className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(34,197,94,0.3)]"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
             <h2 className="text-2xl font-black text-text-light tracking-tight">Bagre.bet</h2>
           </div>
 
@@ -61,9 +68,11 @@ export function MainLayout() {
         {/* Main Content Area */}
         {/* Adicionado margin-left no Desktop para compensar a Sidebar fixed */}
         <main className="flex-grow flex flex-col relative overflow-x-hidden pb-20 lg:pb-0 lg:ml-64 bg-dark-bg w-full">
-          <AnimatePresence mode="wait">
-            <Outlet />
-          </AnimatePresence>
+          <div className="w-full max-w-4xl mx-auto flex flex-col flex-grow">
+            <AnimatePresence mode="wait">
+              <Outlet />
+            </AnimatePresence>
+          </div>
         </main>
 
         {/* Bottom Navigation (Mobile Only) */}

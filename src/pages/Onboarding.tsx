@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
+import logoIcon from '../assets/LogoIcon.png';
 
 export default function Onboarding() {
   const [username, setUsername] = useState('');
@@ -52,7 +53,14 @@ export default function Onboarding() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
         <div className="flex justify-center mb-6">
-          <img src="/src/assets/LogoIcon.png" alt="Bagre.bet Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.4)] animate-pulse" />
+          <img
+            src={logoIcon}
+            alt="Bagre.bet Logo"
+            className="w-24 h-24 object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.4)] animate-pulse"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
         </div>
         <h2 className="text-3xl font-extrabold text-text-light tracking-tight mb-2">
           Escolha seu Vulgo
