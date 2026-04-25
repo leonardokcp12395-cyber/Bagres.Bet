@@ -14,16 +14,6 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [newUsername, setNewUsername] = useState(profile?.username || '');
   const [savingUsername, setSavingUsername] = useState(false);
-  // 👇 ADICIONE ESTE BLOCO AQUI
-  if (!profile) {
-    return (
-      <div className="min-h-screen bg-dark-bg p-8 flex flex-col items-center pt-20">
-        <div className="w-8 h-8 border-4 border-primary-green border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-primary-green font-bold">Puxando seus dados...</p>
-      </div>
-    );
-  }
-  // 👆 FIM DO BLOCO
 
   const handleLogout = async () => {
     try {
