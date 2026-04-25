@@ -3,6 +3,7 @@ import { Home, ListOrdered, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User } from 'lucide-react';
 import logoIcon from '../assets/LogoIcon.png';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
 export function MainLayout() {
   const navItems = [
@@ -69,9 +70,11 @@ export function MainLayout() {
         {/* Adicionado margin-left no Desktop para compensar a Sidebar fixed */}
         <main className="flex-grow flex flex-col relative overflow-x-hidden pb-20 lg:pb-0 lg:ml-64 bg-dark-bg w-full">
           <div className="w-full max-w-4xl mx-auto flex flex-col flex-grow">
-            <AnimatePresence mode="wait">
-              <Outlet />
-            </AnimatePresence>
+            <ErrorBoundary>
+              <AnimatePresence mode="wait">
+                <Outlet />
+              </AnimatePresence>
+            </ErrorBoundary>
           </div>
         </main>
 

@@ -54,7 +54,7 @@ export default function Profile() {
           </p>
           <div className="text-5xl font-black text-primary-green tabular-nums drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]">
             <CountUp
-              end={profile?.saldo_bagrecoins || 0}
+              end={Number(profile?.saldo_bagrecoins) || 0}
               duration={2}
               separator="."
               preserveValue={true}
