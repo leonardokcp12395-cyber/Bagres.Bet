@@ -14,7 +14,6 @@ import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import { MainLayout } from './layouts/MainLayout';
 import { Toaster, toast } from 'sonner';
-import { ErrorBoundary } from './components/ErrorBoundary';
 import { PwaPrompt } from './components/PwaPrompt';
 
 // Protected Route Wrapper
@@ -89,8 +88,7 @@ function App() {
   }, [setUser, fetchProfile]);
 
   return (
-    <ErrorBoundary>
-      <BrowserRouter>
+    <BrowserRouter>
         <PwaPrompt />
         <Toaster theme="dark" position="top-center" />
         <OfflineOverlay />
@@ -123,7 +121,6 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-    </ErrorBoundary>
   );
 }
 
