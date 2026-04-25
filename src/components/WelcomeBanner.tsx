@@ -3,25 +3,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Image as ImageIcon } from 'lucide-react';
 import bannerImg from '../assets/bannerEntrada.jpeg';
 
-const BANNER_STORAGE_KEY = 'bagre_bet_welcome_banner_last_seen';
-const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+const BANNER_STORAGE_KEY = 'bagre_bet_welcome_banner_session_seen';
 
 export function WelcomeBanner() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const lastSeen = localStorage.getItem(BANNER_STORAGE_KEY);
-    const now = Date.now();
+    // Check sessionStorage instead of localStorage so it shows once per session/tab
+    const hasSeenInSession = sessionStorage.getItem(BANNER_STORAGE_KEY);
 
-    if (!lastSeen || now - parseInt(lastSeen, 10) > TWENTY_FOUR_HOURS) {
-      // Break synchronous cycle
-      setTimeout(() => setIsVisible(true), 0);
+    if (!hasSeenInSession) {
+      // Break synchronous cycle to avoid react warnings
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
     }
   }, []);
 
   const handleClose = () => {
     setIsVisible(false);
-    localStorage.setItem(BANNER_STORAGE_KEY, Date.now().toString());
+    sessionStorage.setItem(BANNER_STORAGE_KEY, 'true');
   };
 
   return (
@@ -47,14 +47,19 @@ export function WelcomeBanner() {
             </button>
 
             {bannerImg ? (
-              <img
-                src={bannerImg}
-                alt="Bem-vindo ao Bagre.bet"
-                className="w-full h-auto object-cover max-h-48"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
+              <div className="relative w-full h-48 bg-dark-bg border-b border-dark-border">
+                <img
+                  src={bannerImg}
+                  alt="Bem-vindo ao Bagre.bet"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    // Show a fallback icon gracefully inside the parent container when image crashes
+                    e.currentTarget.parentElement?.classList.add('flex', 'items-center', 'justify-center');
+                    e.currentTarget.parentElement?.insertAdjacentHTML('beforeend', '<div class="text-primary-green opacity-50"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></div>');
+                  }}
+                />
+              </div>
             ) : (
               <div className="w-full h-48 bg-dark-bg flex items-center justify-center border-b border-dark-border">
                 <ImageIcon className="w-12 h-12 text-primary-green opacity-50" />

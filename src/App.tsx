@@ -15,6 +15,7 @@ import Admin from './pages/Admin';
 import { MainLayout } from './layouts/MainLayout';
 import { Toaster, toast } from 'sonner';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { PwaPrompt } from './components/PwaPrompt';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -56,12 +57,15 @@ function App() {
           // ou exibe "Múltipla" se for o caso.
           const time = novaAposta.is_multipla ? 'uma Múltipla' : novaAposta.time_escolhido;
 
-          toast(`🔥 ${novaAposta.username_apostador} acabou de apostar em ${time}!`, {
+          toast(`🔥 ${novaAposta.username_apostador} apostou em ${time}!`, {
             style: {
-              background: '#0D0E12',
+              background: 'rgba(13, 14, 18, 0.95)',
+              backdropFilter: 'blur(10px)',
               color: '#fff',
               border: '1px solid #22c55e',
+              boxShadow: '0 0 20px rgba(34, 197, 94, 0.2)',
             },
+            duration: 4000,
           });
         }
       )
@@ -101,34 +105,35 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
+        <PwaPrompt />
         <Toaster theme="dark" position="top-center" />
         <OfflineOverlay />
         <Routes>
-        <Route path="/" element={<Login />} />
+      <Route path="/" element={<Login />} />
+      <Route
+        path="/onboarding"
+        element={
+          <ProtectedRoute>
+            <Onboarding />
+          </ProtectedRoute>
+        }
+      />
+      {/* Main Layout Wrapper for Dashboard, Apostas, Ranking, Perfil */}
+      <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/minhas-apostas" element={<MinhasApostas />} />
+        <Route path="/ranking" element={<Ranking />} />
+        <Route path="/perfil" element={<Profile />} />
+      </Route>
+
         <Route
-          path="/onboarding"
+          path="/admin"
           element={
             <ProtectedRoute>
-              <Onboarding />
+              <Admin />
             </ProtectedRoute>
           }
         />
-        {/* Main Layout Wrapper for Dashboard, Apostas, Ranking, Perfil */}
-        <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/minhas-apostas" element={<MinhasApostas />} />
-          <Route path="/ranking" element={<Ranking />} />
-          <Route path="/perfil" element={<Profile />} />
-        </Route>
-
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
