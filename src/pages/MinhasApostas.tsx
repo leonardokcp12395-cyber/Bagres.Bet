@@ -12,6 +12,8 @@ interface ApostaComPartida {
   time_escolhido: string;
   valor_apostado: number;
   status: 'pendente' | 'ganhou' | 'perdeu';
+  is_multipla?: boolean;
+  multipla_data?: any;
   partidas: {
     time_a: string;
     time_b: string;
@@ -34,6 +36,8 @@ export default function MinhasApostas() {
           time_escolhido,
           valor_apostado,
           status,
+          is_multipla,
+          multipla_data,
           partidas (
             time_a,
             time_b
@@ -133,7 +137,14 @@ export default function MinhasApostas() {
               >
                 <div className="flex justify-between items-start mb-3">
                   <div className="text-sm font-bold text-text-muted">
-                    {aposta.partidas.time_a} <span className="text-xs font-normal px-1">vs</span> {aposta.partidas.time_b}
+                    {aposta.is_multipla ? (
+                      <span className="flex items-center gap-2">
+                        <span className="bg-primary-green text-dark-bg text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-black">Múltipla</span>
+                        {aposta.multipla_data?.length || 0} Seleções
+                      </span>
+                    ) : (
+                      <>{aposta.partidas?.time_a} <span className="text-xs font-normal px-1">vs</span> {aposta.partidas?.time_b}</>
+                    )}
                   </div>
                   <div className={`flex items-center gap-1.5 text-xs font-black uppercase tracking-wider ${config.textClass}`}>
                     {config.icon}

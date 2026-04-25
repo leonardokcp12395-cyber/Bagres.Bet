@@ -13,7 +13,8 @@ export function WelcomeBanner() {
     const now = Date.now();
 
     if (!lastSeen || now - parseInt(lastSeen, 10) > TWENTY_FOUR_HOURS) {
-      setIsVisible(true);
+      // Break synchronous cycle
+      setTimeout(() => setIsVisible(true), 0);
     }
   }, []);
 
