@@ -53,8 +53,6 @@ function App() {
         { event: 'INSERT', schema: 'public', table: 'apostas' },
         (payload) => {
           const novaAposta = payload.new as any;
-          // Ignora apostas múltiplas para manter a notificação simples,
-          // ou exibe "Múltipla" se for o caso.
           const time = novaAposta.is_multipla ? 'uma Múltipla' : novaAposta.time_escolhido;
 
           toast(`🔥 ${novaAposta.username_apostador} apostou em ${time}!`, {
@@ -71,22 +69,10 @@ function App() {
       )
       .subscribe();
 
-    // Check active sessions and sets the user
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
-        useAuthStore.setState({ loading: false, profile: null });
-      }
-    });
-
-    // Listen for changes on auth state (logged in, signed out, etc.)
+    // Single source of truth para Auth (Resolve o Race Condition)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        // Only set loading to true if we don't already have the profile for this user
-        // This prevents flickering on token refresh.
         if (useAuthStore.getState().profile?.id !== session.user.id) {
           useAuthStore.setState({ loading: true });
           fetchProfile(session.user.id);

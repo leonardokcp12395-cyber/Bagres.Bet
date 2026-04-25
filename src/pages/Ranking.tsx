@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Trophy, Medal } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
-import CountUp from 'react-countup';
 import { Skeleton } from '../components/Skeleton';
 
 interface Profile {
@@ -23,7 +22,7 @@ export default function Ranking() {
         .from('profiles')
         .select('id, username, saldo_bagrecoins')
         .order('saldo_bagrecoins', { ascending: false })
-        .limit(50);
+        .limit(50); // Get top 50
 
       if (!error && data) {
         setRanking(data);
@@ -80,8 +79,7 @@ export default function Ranking() {
           ))
         ) : (
           ranking.map((profile, index) => {
-            const isMe = user?.id === profile.id;
-            
+            const isMe = profile.id === user?.id;
             return (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -102,12 +100,8 @@ export default function Ranking() {
                   </div>
                 </div>
                 <div className="font-black text-lg tabular-nums">
-                  <CountUp
-                    end={profile.saldo_bagrecoins == null ? 0 : Number(profile.saldo_bagrecoins)}
-                    duration={1.5}
-                    separator="."
-                    preserveValue={true}
-                  /> <span className="text-sm opacity-80">🪙</span>
+                  {Number(profile.saldo_bagrecoins == null ? 0 : profile.saldo_bagrecoins).toLocaleString('pt-BR')}
+                  <span className="text-sm opacity-80 ml-1">🪙</span>
                 </div>
               </motion.div>
             );

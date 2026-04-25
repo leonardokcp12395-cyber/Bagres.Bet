@@ -4,7 +4,6 @@ import { LogOut, User as UserIcon, Edit2, Check, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/auth';
 import { useNavigate } from 'react-router-dom';
-import CountUp from 'react-countup';
 import { toast } from 'sonner';
 
 export default function Profile() {
@@ -106,12 +105,7 @@ export default function Profile() {
             Saldo Atual
           </p>
           <div className="text-5xl font-black text-primary-green tabular-nums drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]">
-            <CountUp
-              end={profile?.saldo_bagrecoins == null ? 0 : Number(profile.saldo_bagrecoins)}
-              duration={2}
-              separator="."
-              preserveValue={true}
-            />
+            {Number(profile?.saldo_bagrecoins == null ? 0 : profile.saldo_bagrecoins).toLocaleString('pt-BR')}
             <span className="text-3xl ml-2 opacity-80">🪙</span>
           </div>
         </div>

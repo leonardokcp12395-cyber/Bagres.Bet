@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useDynamicOdds } from '../hooks/useDynamicOdds';
 import { getTeamLogoUrl } from '../utils/teamLogos';
 import { useBetSlipStore } from '../store/betSlip';
@@ -10,8 +11,6 @@ interface PartidaCardProps {
   partida: PartidaRow;
   onBetClick: (partida: PartidaRow, time: string, odd: number) => void;
 }
-
-import { useEffect, useState } from 'react';
 
 export function PartidaCard({ partida, onBetClick }: PartidaCardProps) {
   const { oddA, oddB, loading, trendA, trendB } = useDynamicOdds(
