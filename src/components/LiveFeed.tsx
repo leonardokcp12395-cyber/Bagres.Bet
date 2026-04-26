@@ -78,7 +78,7 @@ export function LiveFeed() {
     <div className="w-full bg-dark-card border border-dark-border rounded-xl overflow-hidden shadow-lg">
       <div className="bg-dark-bg/50 px-4 py-2 border-b border-dark-border flex items-center gap-2">
         <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
-        <h3 className="text-xs font-bold text-text-light uppercase tracking-wider">Radar de Apostas</h3>
+        <h3 className="text-xs font-bold text-text-light uppercase tracking-wider">Radar de Palpites</h3>
       </div>
       <div className="relative h-14 overflow-hidden flex items-center px-4">
         <AnimatePresence mode="popLayout">

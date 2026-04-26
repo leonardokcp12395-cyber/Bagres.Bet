@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
-interface OddsResult {
+interface MultiplicadoresResult {
   oddA: number;
   oddB: number;
   loading: boolean;
@@ -9,8 +9,8 @@ interface OddsResult {
   trendB: 'up' | 'down' | 'neutral';
 }
 
-export function useDynamicOdds(partidaId: string, initialOddA: number, initialOddB: number, timeA: string, timeB: string): OddsResult {
-  const [odds, setOdds] = useState<OddsResult>({
+export function useDynamicOdds(partidaId: string, initialOddA: number, initialOddB: number, timeA: string, timeB: string): MultiplicadoresResult {
+  const [odds, setOdds] = useState<MultiplicadoresResult>({
     oddA: initialOddA,
     oddB: initialOddB,
     loading: true,
@@ -50,7 +50,7 @@ export function useDynamicOdds(partidaId: string, initialOddA: number, initialOd
           }
         });
 
-        // Calculate dynamic odds: Total_Apostado_na_Partida / Total_Apostado_no_Time
+        // Calculate dynamic odds: Total_Inscrito_na_Partida / Total_Inscrito_no_Time
         // Minimum margin: 1.1
         let calcOddA = totalA > 0 ? totalPartida / totalA : initialOddA;
         let calcOddB = totalB > 0 ? totalPartida / totalB : initialOddB;
@@ -58,7 +58,7 @@ export function useDynamicOdds(partidaId: string, initialOddA: number, initialOd
         calcOddA = Math.max(1.1, Number(calcOddA.toFixed(2)));
         calcOddB = Math.max(1.1, Number(calcOddB.toFixed(2)));
 
-        setOdds((prev) => {
+        setOdds((prev: MultiplicadoresResult) => {
           let trendA: 'up' | 'down' | 'neutral' = 'neutral';
           let trendB: 'up' | 'down' | 'neutral' = 'neutral';
 

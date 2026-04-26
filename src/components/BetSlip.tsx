@@ -10,11 +10,11 @@ export function BetSlip() {
   const { selections, removeSelection, clearSlip, getTotalOdds } = useBetSlipStore();
   const { user, profile, fetchProfile } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [valorApostado, setValorApostado] = useState<number | ''>('');
+  const [valorInscrito, setValorInscrito] = useState<number | ''>('');
   const [loading, setLoading] = useState(false);
 
   const totalOdds = getTotalOdds();
-  const potentialReturn = typeof valorApostado === 'number' ? (valorApostado * totalOdds).toFixed(2) : '0.00';
+  const potentialReturn = typeof valorInscrito === 'number' ? (valorInscrito * totalOdds).toFixed(2) : '0.00';
   const hasSelections = selections.length > 0;
 
   const handleSubmitBet = async () => {
@@ -23,12 +23,12 @@ export function BetSlip() {
       return;
     }
 
-    if (typeof valorApostado !== 'number' || valorApostado <= 0) {
+    if (typeof valorInscrito !== 'number' || valorInscrito <= 0) {
       toast.error('Insira um valor válido para apostar.');
       return;
     }
 
-    if (profile.saldo_bagrecoins < valorApostado) {
+    if (profile.saldo_bagrecoins < valorInscrito) {
       toast.error('Saldo insuficiente.');
       return;
     }
@@ -37,7 +37,7 @@ export function BetSlip() {
 
     try {
       // 1. Deduct balance
-      const newBalance = profile.saldo_bagrecoins - valorApostado;
+      const newBalance = profile.saldo_bagrecoins - valorInscrito;
       const { error: profileError } = await supabase
         .from('profiles')
         .update({ saldo_bagrecoins: newBalance } as never)
@@ -55,7 +55,7 @@ export function BetSlip() {
         username_apostador: profile.username,
         partida_id: selections[0].partidaId,
         time_escolhido: isMultipla ? 'Múltipla' : selections[0].timeEscolhido,
-        valor_apostado: valorApostado,
+        valor_apostado: valorInscrito,
         status: 'pendente',
         is_multipla: isMultipla,
         multipla_data: isMultipla ? selections : null
@@ -66,7 +66,7 @@ export function BetSlip() {
       await fetchProfile(user.id);
       clearSlip();
       setIsOpen(false);
-      setValorApostado('');
+      setValorInscrito('');
       toast.success('Múltipla registrada com sucesso!');
 
     } catch (err) {
@@ -178,8 +178,8 @@ export function BetSlip() {
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted font-bold">🪙</span>
                     <input
                       type="number"
-                      value={valorApostado}
-                      onChange={(e) => setValorApostado(Number(e.target.value) || '')}
+                      value={valorInscrito}
+                      onChange={(e) => setValorInscrito(Number(e.target.value) || '')}
                       placeholder="Valor"
                       className="w-full bg-dark-card border border-dark-border rounded-xl pl-10 pr-4 py-3 text-text-light font-bold focus:border-primary-green outline-none"
                     />
@@ -192,7 +192,7 @@ export function BetSlip() {
 
                 <button
                   onClick={handleSubmitBet}
-                  disabled={loading || !valorApostado || selections.length === 0}
+                  disabled={loading || !valorInscrito || selections.length === 0}
                   className="w-full py-4 bg-primary-green text-dark-bg font-black rounded-xl shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:shadow-[0_0_20px_rgba(34,197,94,0.5)] transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider"
                 >
                   {loading ? 'Processando...' : 'Confirmar Múltipla'}

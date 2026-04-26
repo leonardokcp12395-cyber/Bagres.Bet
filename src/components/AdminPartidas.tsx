@@ -83,7 +83,7 @@ export function AdminPartidas() {
   const [selectedTeamB, setSelectedTeamB] = useState(teamsData[1] || null);
   const [customNameB, setCustomNameB] = useState('');
 
-  // Odds
+  // Multiplicadores
   const [oddA, setOddA] = useState('1.5');
   const [oddB, setOddB] = useState('2.5');
 
