@@ -76,7 +76,7 @@ export function WelcomeBanner() {
                 onClick={handleClose}
                 className="w-full py-4 bg-primary-green text-dark-bg font-bold rounded-xl shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:shadow-[0_0_20px_rgba(34,197,94,0.6)] transition-all"
               >
-                Bora Apostar!
+                Bora Palpitar!
               </button>
             </div>
           </motion.div>

@@ -103,7 +103,7 @@ export function AdminAnalytics() {
           </div>
 
           <div className="mt-6 pt-6 border-t border-dark-border flex justify-between items-center text-sm">
-            <span className="text-text-muted font-bold">Total de Tickets (Apostas)</span>
+            <span className="text-text-muted font-bold">Total de Inscrições</span>
             <span className="text-text-light font-black">{stats.totalApostas}</span>
           </div>
         </div>

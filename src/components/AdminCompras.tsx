@@ -29,7 +29,18 @@ export function AdminCompras() {
   };
 
   useEffect(() => {
-    fetchCompras();
+    const isMounted = true;
+
+    const loadCompras = async () => {
+      const { data, error } = await (supabase as any).from('compras').select('*').order('created_at', { ascending: false });
+
+      if (!error && data && isMounted) {
+        setCompras(data);
+      }
+      if (isMounted) setLoading(false);
+    };
+
+    loadCompras();
 
     const channel = (supabase as any)
       .channel('admin_compras')
