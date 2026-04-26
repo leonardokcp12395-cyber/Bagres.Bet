@@ -3,7 +3,7 @@ import { useAuthStore } from '../store/auth';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AdminCaixa } from '../components/AdminCaixa';
-import { AdminCompras } from '../components/AdminCompras';
+
 import { AdminPartidas } from '../components/AdminPartidas';
 import { AdminAnalytics } from '../components/AdminAnalytics';
 import { ArrowLeft } from 'lucide-react';
@@ -55,21 +55,14 @@ export default function Admin() {
         >
           Caixa
         </button>
-        <button
-          onClick={() => setActiveTab('loja')}
-          className={`flex-1 min-w-[80px] py-3 text-xs md:text-sm font-bold rounded-lg transition-colors ${
-            activeTab === 'loja' ? 'bg-dark-bg text-primary-green shadow' : 'text-text-muted hover:text-text-light'
-          }`}
-        >
-          Loja (PIX)
-        </button>
+
       </div>
 
       <div className="flex-grow">
         {activeTab === 'analytics' && <AdminAnalytics />}
         {activeTab === 'partidas' && <AdminPartidas />}
         {activeTab === 'caixa' && <AdminCaixa />}
-        {activeTab === 'loja' && <AdminCompras />}
+
       </div>
     </motion.div>
   );
